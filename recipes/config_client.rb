@@ -71,6 +71,7 @@ openvpn_process :client_configs do
       variables(:config_name => config_name, :config => config)
       cookbook config[:route_up_cookbook] if config[:route_up_cookbook]
       notifies :reload, "service[openvpn]"
+      notifies :reload, "service[openvpn@#{config_name}-#{user_name}]"
     end
   end
 
@@ -80,6 +81,7 @@ openvpn_process :client_configs do
     group "openvpn"
     mode 00640
     notifies :restart, "service[openvpn]"
+    notifies :restart, "service[openvpn@#{config_name}-#{user_name}]"
     variables(:config_name => config_name, :config => config, :user_name => config[:user_name])
   end
 end
